@@ -35,7 +35,7 @@ ImasCg.Ierukana = function () {
 	var lastChampionName = null;
 
 	var getChampionById = function(id) {
-		$.each(jsonData.data, function(index, champion) {
+		$.each(jsonData, function(index, champion) {
 			if (champion.id === id)
 				return champion;
 		});
@@ -44,7 +44,7 @@ ImasCg.Ierukana = function () {
 
 	var getChampionByName = function(name, compare_flags) {
 		var result = [];
-		$.each(jsonData.data, function(index, champion) {
+		$.each(jsonData, function(index, champion) {
 			if (champion.name.replace('・', '').replace('＝', '') === name) {
 				result.push(champion);
 			}
@@ -54,7 +54,7 @@ ImasCg.Ierukana = function () {
 
 	var numOfAllChampionsByAttribute = function (attr) {
 		var cnt = 0;
-		$.each(jsonData.data, function(index, champion) {
+		$.each(jsonData, function(index, champion) {
 				cnt++;
 		});
 		return cnt;
@@ -91,7 +91,7 @@ ImasCg.Ierukana = function () {
 	};
 
 	var giveUp = function () {
-		$.each(jsonData.data, function(index, champion) {
+		$.each(jsonData, function(index, champion) {
 			if (! champion.answered) {
 				$('#' + champion.id).addClass('giveUp').text(champion.name);
 			}
@@ -149,7 +149,7 @@ ImasCg.Ierukana = function () {
 				+ numOfChampions['all'] + '人の名前を全て言えた'
 				+ job[difficulty] + 'です。最後に言ったチャンピオンは' + lastChampionName + 'です。';
 		} else {
-			var forgetChampions = jsonData.data.filter(function(v) {
+			var forgetChampions = jsonData.filter(function(v) {
 				return !v.answered;
 			});
 			var oneForgetChampion = forgetChampions[Math.floor(Math.random() * (forgetChampions.length - 1))];
@@ -238,7 +238,7 @@ ImasCg.Ierukana = function () {
 			$tr = $('<tr></tr>');
 			cnt = 0;
 		};
-		$.each(jsonData.data, function(index, champion) {
+		$.each(jsonData, function(index, champion) {
 			champion.answered = false;
 			champion.attr = 'all';
 			if (champion.attr === attr) {
@@ -262,7 +262,7 @@ ImasCg.Ierukana = function () {
 			jsonData = null;
 
 			var innerInit = function () {
-				numOfChampions['all'] = Object.keys(jsonData.data).length;
+				numOfChampions['all'] = jsonData.length;
 				numOfRemains['all'] = numOfChampions['all'];
 				$.each(THREE_ATTRIBUTES_ARRAY, function(index, attr) {
 					numOfChampions[attr] = numOfAllChampionsByAttribute(attr);
@@ -289,7 +289,7 @@ ImasCg.Ierukana = function () {
 			};
 
 			$.getJSON('data/champion.json').done(function(data) {
-				jsonData = data;
+				jsonData = Object.keys(data.data).map(function (key) {return data.data[key]});
 				innerInit();
 			}).fail(function(errorData) {
 				$('#message-area').text('データ読み込みエラー');
