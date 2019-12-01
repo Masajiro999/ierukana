@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>シンデレラガールズ言えるかな？</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+		<script src="js/ierukana.min.js"></script>
+		<link href="css/ierukana.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container">
+
+			<div id="header" class="row">
+				<div class="col-md-10">
+					<h2 class="text-muted">シンデレラガールズ<span class="numOfIdol"></span>人言えるかな？</h2>
+				</div>
+				<div class="col-md-2">
+					<div id="tweet-btn">
+						<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://marsa746079.github.io/ierukana/" data-text="シンデレラガールズ言えるかな" data-lang="ja" data-hashtags="シンデレラガールズ言えるかな">ツイート</a>
+						<script>
+							! function(d, s, id) {
+								var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+								if (!d.getElementById(id)) {
+									js = d.createElement(s);
+									js.id = id;
+									js.src = p + '://platform.twitter.com/widgets.js';
+									fjs.parentNode.insertBefore(js, fjs);
+								}
+							}(document, 'script', 'twitter-wjs');
+						</script>
+					</div>
+				</div>
+			</div>
+
+			<div class="contents">
+
+				<div id="readme" class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">遊び方</h3>
+					</div>
+					<div class="panel-body">
+						・シンデレラガールズに登場するアイドルの名前を答えてもらいます。（トレーナー姉妹を除く）<br>
+						・まず下の難易度を選びます。NORMALのままでもいいです。<br>
+						・ゲーム開始ボタンを押すとカウントダウンが始まるので、0になったらアイドルの名前をひたすら入力します。<br>
+						・名前が頭からひねり出せなくなったら、降参ボタンを押します。<br>
+					</div>
+				</div>
+
+				<div id="difficulty-show"></div>
+				<div id="difficulty-select" class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">難易度選択</h3>
+					</div>
+					<div class="panel-body">
+						<div id="radio-easy" class="radio">
+							<label>
+								<input id="difficulty-radio1" type="radio" name="difficulty-radio" value="easy" />
+								EASY：苗字か名前を、ひらがなか漢字で入力すればＯＫです。初心者Ｐ向け。（例：しまむら、りん、未央）
+							</label>
+						</div>
+						<div id="radio-normal" class="radio">
+							<label>
+								<input id="difficulty-radio2" type="radio" name="difficulty-radio" value="normal" checked />
+								NORMAL：フルネームをひらがなか漢字で入力すると正解になります。一般的なＰ向け。（例：しまむらうづき、しぶやりん、本田未央）
+							</label>
+						</div>
+						<div id="radio-hard" class="radio">
+							<label>
+								<input id="difficulty-radio3" type="radio" name="difficulty-radio" value="hard" />
+								HARD：フルネームを漢字で入力しないと正解になりません。輝きの向こう側を目指すＰ向け。（例：島村卯月、渋谷凛、本田未央）
+							</label>
+						</div>
+						※外国勢はEASY、NORMALではひらがな・カタカナ両方OK。HARDはカタカナのみです。
+					</div>
+				</div>
+
+				<div id="answer-area" class="row">
+					<div id="timer-area">000:00:00</div>
+					<div id="remain-area">残り<span id="num-of-remain">○○</span>人</div>
+					<input type="text" id="answer-text" />
+					<input type="button" id="answer-btn" class="btn btn-primary" value="答える" disabled="false" />
+					<input type="button" id="game-start-btn" class="btn btn-success" value="ゲーム開始" />
+					<br/>
+					<div id="message-area">&nbsp;</div>
+				</div>
+
+				<div id="table-area">
+					<table id="cu-idols" class="table table-bordered">
+						<thead>
+							<tr id="cu-header"><th colspan="10">Cute <span class="remain">あと○人</span></th></tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<table id="co-idols" class="table table-bordered">
+						<thead>
+							<tr id="co-header"><th colspan="10">Cool <span class="remain">あと○人</span></th></tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<table id="pa-idols" class="table table-bordered">
+						<thead>
+							<tr id="pa-header"><th colspan="10">Passion <span class="remain">あと○人</span></th></tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+				<div id="readme" class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">変更履歴</h3>
+					</div>
+					<div class="panel-body">
+						2014/06/20 公開<br>
+						2014/06/20 アイドルデータに抜けがあったので追加<br>
+						2014/06/21 EASYモード時、一部のアイドル名に反応しないバグを修正<br>
+						2014/09/19 新エリアのアイドルを追加<br>
+						2016/12/09 コラボアイドルを追加<br>
+					</div>
+				</div>
+
+			</div>
+
+			<div id="footer">
+				<p>当サイトは　<a href="http://hoget.web.fc2.com/pokesay.html" target="_blank">初代ポケモン151匹言えるかな？</a>　様に刺激されて作成されました。</p>
+				<p>バグ報告・クレーム等は　<a href="https://twitter.com/marsa746079" target="_blank">@marsa746079</a>　まで</p>
+			</div>
+
+		</div>
+	</body>
+</html>

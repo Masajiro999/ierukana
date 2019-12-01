@@ -1,0 +1,95 @@
+#tweet-btn {
+	margin-top: 15px;
+}
+
+#timer-area {
+	max-width: 300px;
+	min-width: 200px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	float: left;
+	margin-left: 4px;
+	text-align: center;
+	font-size: 200%;
+}
+
+#remain-area {
+	max-width: 300px;
+	min-width: 200px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	float: left;
+	margin-left: 6px;
+	margin-right: 8px;
+	text-align: center;
+	font-size: 200%;
+}
+
+#num-of-remain {
+	color: brown;
+}
+
+#answer-btn {
+}
+#game-start-btn {
+}
+#result-tweet-btn {
+}
+
+table {
+	table-layout:fixed;
+}
+
+#message-area {
+	color: red;
+}
+
+#table-area td {
+	padding: 2px;
+	font-size: 80%;
+}
+#table-area td.answered {
+	background-color: cyan;
+}
+#table-area td.giveUp {
+	color: red;
+}
+
+#cu-header {
+	color: white;
+	background-color: deeppink;
+
+}
+#cu-header > th {
+	padding: 4px;
+}
+
+#co-header {
+	color: white;
+	background-color: blue;
+}
+#co-header > th {
+	padding: 4px;
+}
+
+#pa-header {
+	color: white;
+	background-color: orange;
+}
+#pa-header > th {
+	padding: 4px;
+}
