@@ -18,8 +18,8 @@ ImasCg.Ierukana = function () {
 	};
 	var MESSAGE = {
 		'gameClear': 'ゲームクリア！',
-		'alreadyAnswer': 'その子はもう解答済みです。',
-		'notExist': '該当する名前が見つかりません。',
+		'alreadyAnswer': 'そのチャンピオンはもう解答済みです。',
+		'notExist': '該当するチャンピオンが見つかりません。',
 	};
 	var THREE_ATTRIBUTES_ARRAY = ['all'];
 	var COLUMNS_IN_ROW = 10;
