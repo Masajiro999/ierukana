@@ -2,7 +2,7 @@ var ImasCg = (ImasCg ? ImasCg : {});
 ImasCg.Ierukana = function () {
 
 	var SITE_URL = 'https://masajiro999.github.io/ierukana/';
-	var JSON_URL = 'http://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion.json';
+	var JSON_URL = 'https://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion.json';
 
 	var COMPARE_MODE_FLAG = {
 		name: 1,
