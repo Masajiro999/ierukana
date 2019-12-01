@@ -2,7 +2,7 @@ var ImasCg = (ImasCg ? ImasCg : {});
 ImasCg.Ierukana = function () {
 
 	var SITE_URL = 'https://masajiro999.github.io/ierukana/';
-	var JSON_URL = 'https://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion.json';
+	//var JSON_URL = 'https://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion.json';直接はアクセスできない
 
 	var COMPARE_MODE_FLAG = {
 		name: 1,
@@ -289,7 +289,7 @@ ImasCg.Ierukana = function () {
 				});
 			};
 
-			$.getJSON(JSON_URL).done(function(data) {
+			$.getJSON('data/champion.json').done(function(data) {
 				jsonData = data;
 				innerInit();
 			}).fail(function(errorData) {
