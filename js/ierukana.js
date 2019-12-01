@@ -179,7 +179,6 @@ ImasCg.Ierukana = function () {
 				lastChampionName = champion.name;
 
 				numOfRemains['all'] -= 1;
-				numOfRemains[champion.attr] -= 1;
 				updateChampionsNum();
 
 				$('#answer-text').val('');
