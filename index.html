@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>シンデレラガールズ言えるかな？</title>
+		<title>LoLチャンピオン言えるかな？</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 		<script src="js/ierukana.js"></script>
@@ -14,11 +13,11 @@
 
 			<div id="header" class="row">
 				<div class="col-md-10">
-					<h2 class="text-muted">シンデレラガールズ<span class="numOfIdol"></span>人言えるかな？</h2>
+					<h2 class="text-muted">LoLチャンピオン<span class="numOfChampion"></span>人言えるかな？β</h2>
 				</div>
 				<div class="col-md-2">
 					<div id="tweet-btn">
-						<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://masajiro999.github.io/ierukana/" data-text="シンデレラガールズ言えるかな" data-lang="ja" data-hashtags="シンデレラガールズ言えるかな">ツイート</a>
+						<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://masajiro999.github.io/ierukana/" data-text="LoLチャンピオン言えるかな" data-lang="ja" data-hashtags="LoLチャンピオン言えるかな">ツイート</a>
 						<script>
 							! function(d, s, id) {
 								var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
@@ -41,9 +40,10 @@
 						<h3 class="panel-title">遊び方</h3>
 					</div>
 					<div class="panel-body">
-						・シンデレラガールズに登場するアイドルの名前を答えてもらいます。（トレーナー姉妹を除く）<br>
-						・まず下の難易度を選びます。NORMALのままでもいいです。<br>
-						・ゲーム開始ボタンを押すとカウントダウンが始まるので、0になったらアイドルの名前をひたすら入力します。<br>
+						・リーグオブレジェンドに登場するチャンピオンの名前を正式名称で答えてもらいます。<br>
+						<!--・まず下の難易度を選びます。NORMALのままでもいいです。<br>-->
+						・ゲーム開始ボタンを押すとカウントダウンが始まるので、0になったらチャンピオンの名前をひたすら入力します。<br>
+						・チャンピオンの名前入力はエンターキーによる入力を推奨します。<br>
 						・名前が頭からひねり出せなくなったら、降参ボタンを押します。<br>
 					</div>
 				</div>
@@ -51,28 +51,27 @@
 				<div id="difficulty-show"></div>
 				<div id="difficulty-select" class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title">難易度選択</h3>
+						<h3 class="panel-title">難易度選択（βはノーマルのみ）</h3>
 					</div>
 					<div class="panel-body">
 						<div id="radio-easy" class="radio">
 							<label>
-								<input id="difficulty-radio1" type="radio" name="difficulty-radio" value="easy" />
-								EASY：苗字か名前を、ひらがなか漢字で入力すればＯＫです。初心者Ｐ向け。（例：しまむら、りん、未央）
+								<input id="difficulty-radio1" type="radio" name="difficulty-radio" value="easy" disabled/>
+								EASY：チャンピオン名を、正式名称か英語で入力すればＯＫです。初心者サモナー向け。
 							</label>
 						</div>
 						<div id="radio-normal" class="radio">
 							<label>
 								<input id="difficulty-radio2" type="radio" name="difficulty-radio" value="normal" checked />
-								NORMAL：フルネームをひらがなか漢字で入力すると正解になります。一般的なＰ向け。（例：しまむらうづき、しぶやりん、本田未央）
+								NORMAL：チャンピオン名を正式名称を入力すると正解になります。一般的なサモナー向け。※ただし記号「・」と「＝」を除く
 							</label>
 						</div>
 						<div id="radio-hard" class="radio">
 							<label>
-								<input id="difficulty-radio3" type="radio" name="difficulty-radio" value="hard" />
-								HARD：フルネームを漢字で入力しないと正解になりません。輝きの向こう側を目指すＰ向け。（例：島村卯月、渋谷凛、本田未央）
+								<input id="difficulty-radio3" type="radio" name="difficulty-radio" value="hard" disabled/>
+								HARD：チャンピオン名を記号ありで入力しないと正解になりません。極限サモナー向け。（記号「・」と「＝」を正しく入力）
 							</label>
 						</div>
-						※外国勢はEASY、NORMALではひらがな・カタカナ両方OK。HARDはカタカナのみです。
 					</div>
 				</div>
 
@@ -87,23 +86,9 @@
 				</div>
 
 				<div id="table-area">
-					<table id="cu-idols" class="table table-bordered">
+					<table id="all-champions" class="table table-bordered">
 						<thead>
-							<tr id="cu-header"><th colspan="10">Cute <span class="remain">あと○人</span></th></tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-					<table id="co-idols" class="table table-bordered">
-						<thead>
-							<tr id="co-header"><th colspan="10">Cool <span class="remain">あと○人</span></th></tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-					<table id="pa-idols" class="table table-bordered">
-						<thead>
-							<tr id="pa-header"><th colspan="10">Passion <span class="remain">あと○人</span></th></tr>
+							<tr id="all-header"><th colspan="10">9.23 チャンピオン <span class="remain">あと○人</span></th></tr>
 						</thead>
 						<tbody>
 						</tbody>
@@ -115,14 +100,14 @@
 						<h3 class="panel-title">変更履歴</h3>
 					</div>
 					<div class="panel-body">
-						2019/12/1 公開<br>
+						2019/12/1 β公開<br>
 					</div>
 				</div>
 
 			</div>
 
 			<div id="footer">
-				<p>当サイトは　<a href="http://hoget.web.fc2.com/pokesay.html" target="_blank">初代ポケモン151匹言えるかな？</a>　様に刺激されて作成されました。</p>
+				<p>当サイトは　<a href="http://marsa746079.github.io/ierukana/" target="_blank">シンデレラガールズ言えるかな？</a>　様に刺激されて作成されました。</p>
 				<p>バグ報告・クレーム等は　<a href="https://twitter.com/masajiro" target="_blank">@masajiro</a>　まで</p>
 			</div>
 

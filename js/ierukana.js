@@ -2,10 +2,11 @@ var ImasCg = (ImasCg ? ImasCg : {});
 ImasCg.Ierukana = function () {
 
 	var SITE_URL = 'https://masajiro999.github.io/ierukana/';
+	var JSON_URL = 'http://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion.json';
 
 	var COMPARE_MODE_FLAG = {
-		full_name: 1,
-		full_name_kana: 2,
+		name: 1,
+		name_kana: 2,
 		first_name: 4,
 		first_name_kana: 8,
 		last_name: 16,
@@ -20,54 +21,49 @@ ImasCg.Ierukana = function () {
 		'alreadyAnswer': 'その子はもう解答済みです。',
 		'notExist': '該当する名前が見つかりません。',
 	};
-	var THREE_ATTRIBUTES_ARRAY = ['cu', 'co', 'pa'];
+	var THREE_ATTRIBUTES_ARRAY = ['all'];
 	var COLUMNS_IN_ROW = 10;
 
 	//var jsonData = null;
-	var numOfIdols = {'all': 0, 'cu': 0, 'co': 0, 'pa': 0 };
+	var numOfChampions = {'all': 0, 'cu': 0, 'co': 0, 'pa': 0 };
 	var numOfRemains = {'all': 0, 'cu': 0, 'co': 0, 'pa': 0 };
 
 	var compare_mode = null;
 	var difficulty = null;
 	var startUnixTime = null;
 	var clearCount = null;
-	var lastIdolName = null;
+	var lastChampionName = null;
 
-	var getIdolById = function(id) {
-		$.each(jsonData.idols, function(index, idol) {
-			if (idol.id === id)
-				return idol;
+	var getChampionById = function(id) {
+		$.each(jsonData.data, function(index, champion) {
+			if (champion.id === id)
+				return champion;
 		});
 		return null;
 	};
 
-	var getIdolByName = function(name, compare_flags) {
+	var getChampionByName = function(name, compare_flags) {
 		var result = [];
-		$.each(jsonData.idols, function(index, idol) {
-			$.each(COMPARE_MODE_FLAG, function(key, compare_flag) {
-				if (compare_flags & compare_flag) {
-					if (idol[key].replace('・', '') === name) {
-						result.push(idol);
-					}
-				}
-			});
+		$.each(jsonData.data, function(index, champion) {
+			if (champion.name.replace('・', '').replace('＝', '') === name) {
+				result.push(champion);
+			}
 		});
 		return result;
 	};
 
-	var numOfAllIdolsByAttribute = function (attr) {
+	var numOfAllChampionsByAttribute = function (attr) {
 		var cnt = 0;
-		$.each(jsonData.idols, function(index, idol) {
-			if (idol.attr === attr)
+		$.each(jsonData.data, function(index, champion) {
 				cnt++;
 		});
 		return cnt;
 	};
 
-	var updateIdolsNum = function () {
+	var updateChampionsNum = function () {
 		$('#num-of-remain').text(numOfRemains['all']);
 		$.each(THREE_ATTRIBUTES_ARRAY, function(index, attr) {
-			$('#' + attr + '-idols span.remain').text('あと' + numOfRemains[attr] + '人');
+			$('#' + attr + '-champions span.remain').text('あと' + numOfRemains[attr] + '人');
 		});
 	};
 
@@ -79,9 +75,9 @@ ImasCg.Ierukana = function () {
 			$('#difficulty-show').text($('#radio-' + difficulty + ' label').text());
 		});
 
-		numOfRemains = $.extend(true, {}, numOfIdols);
+		numOfRemains = $.extend(true, {}, numOfChampions);
 		$.each(THREE_ATTRIBUTES_ARRAY, function(index, attr) { initTableByAttribute(attr); });
-		updateIdolsNum();
+		updateChampionsNum();
 	};
 
 	var resetFormAtGameEnd = function() {
@@ -95,9 +91,9 @@ ImasCg.Ierukana = function () {
 	};
 
 	var giveUp = function () {
-		$.each(jsonData.idols, function(index, idol) {
-			if (! idol.answered) {
-				$('#' + idol.id).addClass('giveUp').text(idol.full_name);
+		$.each(jsonData.data, function(index, champion) {
+			if (! champion.answered) {
+				$('#' + champion.id).addClass('giveUp').text(champion.name);
 			}
 		});
 		resetFormAtGameEnd();
@@ -145,26 +141,26 @@ ImasCg.Ierukana = function () {
 		var tweetText = '';
 		if (numOfRemains['all'] == 0) {
 			var job = {
-				'easy':'アイドルマスター',
-				'normal':'アイドルマスター☆',
-				'hard':'アイドルマスター☆☆',
+				'easy':'チャンピオンマスター',
+				'normal':'チャンピオンマスター☆',
+				'hard':'チャンピオンマスター☆☆',
 			};
-			tweetText = 'あなたは ' + clearTime + ' でアイドル'
-				+ numOfIdols['all'] + '人の名前を全て言えた'
-				+ job[difficulty] + 'です。最後に言ったアイドルは' + lastIdolName + 'です。';
+			tweetText = 'あなたは ' + clearTime + ' でチャンピオン'
+				+ numOfChampions['all'] + '人の名前を全て言えた'
+				+ job[difficulty] + 'です。最後に言ったチャンピオンは' + lastChampionName + 'です。';
 		} else {
-			var forgetIdols = jsonData.idols.filter(function(v) {
+			var forgetChampions = jsonData.data.filter(function(v) {
 				return !v.answered;
 			});
-			var oneForgetIdol = forgetIdols[Math.floor(Math.random() * (forgetIdols.length - 1))];
+			var oneForgetChampion = forgetChampions[Math.floor(Math.random() * (forgetChampions.length - 1))];
 
 			tweetText = 'あなたは ' + clearTime + ' かけて'
-				+ (numOfIdols['all'] - numOfRemains['all'])
-				+ '人のアイドルを言うことができました。'
-				+ oneForgetIdol.full_name + ' 等、' + numOfRemains['all']
+				+ (numOfChampions['all'] - numOfRemains['all'])
+				+ '人のチャンピオンを言うことができました。'
+				+ oneForgetChampion.name + ' 等、' + numOfRemains['all']
 				+ '人の名前を言えませんでした。精進しましょう。';
 		}
-		var resultTweet = 'https://twitter.com/intent/tweet?hashtags=シンデレラガールズ言えるかな&text='
+		var resultTweet = 'https://twitter.com/intent/tweet?hashtags=LoLチャンピオン言えるかな&text='
 		resultTweet = resultTweet + tweetText + SITE_URL;
 		window.open(encodeURI(resultTweet));
 	};
@@ -173,18 +169,18 @@ ImasCg.Ierukana = function () {
 		var answer = $('#answer-text').val();
 		answer = answer.replace('・', '');
 
-		var idolsHitName = getIdolByName(answer, compare_mode);
+		var idolsHitName = getChampionByName(answer, compare_mode);
 		if (idolsHitName.length > 0) {
 			var idolsNotAnswered = idolsHitName.filter(function(v){ return !v.answered; });
 			if (idolsNotAnswered.length > 0) {
-				var idol = idolsNotAnswered[0];
-				$('#' + idol.id).addClass('answered').text(idol.full_name);
-				idol.answered = true;
-				lastIdolName = idol.full_name;
+				var champion = idolsNotAnswered[0];
+				$('#' + champion.id).addClass('answered').text(champion.name);
+				champion.answered = true;
+				lastChampionName = champion.name;
 
 				numOfRemains['all'] -= 1;
-				numOfRemains[idol.attr] -= 1;
-				updateIdolsNum();
+				numOfRemains[champion.attr] -= 1;
+				updateChampionsNum();
 
 				$('#answer-text').val('');
 				$('#message-area').text('');
@@ -223,15 +219,15 @@ ImasCg.Ierukana = function () {
 					COMPARE_MODE_FLAG.last_name_kana;
 			case 'normal':
 				compare_mode = compare_mode |
-					COMPARE_MODE_FLAG.full_name_kana;
+					COMPARE_MODE_FLAG.name;
 			case 'hard':
 				compare_mode = compare_mode |
-					COMPARE_MODE_FLAG.full_name;
+					COMPARE_MODE_FLAG.name;
 		}
 	};
 
 	var initTableByAttribute = function (attr) {
-		var tableId = '#' + attr + '-idols';
+		var tableId = '#' + attr + '-champions';
 
 		$(tableId + ' span.remain').text('あと' + numOfRemains[attr] + '人');
 		$(tableId + ' tbody').html('');
@@ -243,10 +239,11 @@ ImasCg.Ierukana = function () {
 			$tr = $('<tr></tr>');
 			cnt = 0;
 		};
-		$.each(jsonData.idols, function(index, idol) {
-			idol.answered = false;
-			if (idol.attr === attr) {
-				var $td = $('<td id="' + idol.id + '">&nbsp;</td>');
+		$.each(jsonData.data, function(index, champion) {
+			champion.answered = false;
+			champion.attr = 'all';
+			if (champion.attr === attr) {
+				var $td = $('<td id="' + champion.id + '">&nbsp;</td>');
 				$tr.append($td.clone());
 				cnt++;
 				if (cnt == COLUMNS_IN_ROW) {
@@ -266,15 +263,15 @@ ImasCg.Ierukana = function () {
 			jsonData = null;
 
 			var innerInit = function () {
-				numOfIdols['all'] = jsonData.idols.length;
-				numOfRemains['all'] = numOfIdols['all'];
+				numOfChampions['all'] = Object.keys(jsonData.data).length;
+				numOfRemains['all'] = numOfChampions['all'];
 				$.each(THREE_ATTRIBUTES_ARRAY, function(index, attr) {
-					numOfIdols[attr] = numOfAllIdolsByAttribute(attr);
-					numOfRemains[attr] = numOfIdols[attr];
+					numOfChampions[attr] = numOfAllChampionsByAttribute(attr);
+					numOfRemains[attr] = numOfChampions[attr];
 					initTableByAttribute(attr);
 				});
-				$('.numOfIdol').text(numOfIdols['all']);
-				$('#num-of-remain').text(numOfIdols['all']);
+				$('.numOfChampion').text(numOfChampions['all']);
+				$('#num-of-remain').text(numOfChampions['all']);
 
 				$('#answer-text').on('keypress', function(e) {
 					if (e.which == 13) {
@@ -292,7 +289,7 @@ ImasCg.Ierukana = function () {
 				});
 			};
 
-			$.getJSON('data/idols.json').done(function(data) {
+			$.getJSON(JSON_URL).done(function(data) {
 				jsonData = data;
 				innerInit();
 			}).fail(function(errorData) {
