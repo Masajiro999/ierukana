@@ -5,6 +5,11 @@
 		<title>LoLチャンピオン言えるかな？</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+		<script type="text/javascript" src="lib/i18next/i18next.min.js"></script>
+	  <script type="text/javascript" src="lib/jquery-i18next/jquery-i18next.min.js"></script>
+	  <script type="text/javascript" src="lib/i18next-xhr-backend/i18nextXHRBackend.min.js"></script>
+	  <script type="text/javascript" src="common/js/common.js"></script>
+	  <script type="text/javascript" src="js/index.js"></script>
 		<script src="js/ierukana.js"></script>
 		<link href="css/ierukana.css" rel="stylesheet">
 
@@ -26,6 +31,14 @@
 				<div class="col-md-10">
 					<h2 class="text-muted">LoLチャンピオン<span class="numOfChampion"></span>人言えるかな？β</h2>
 				</div>
+				<div class="col-sm-3">
+					<select class="form-control" id="lang">
+						<option value="ja">日本語</option>
+						<option value="en">English</option>
+						<option value="ko">한국</option>
+					</select>
+				</div>
+
 				<div class="col-md-2">
 					<div id="tweet-btn">
 						<a href="https://twitter.com/share" class="twitter-share-button" data-url="https://masajiro999.github.io/ierukana/" data-text="LoLチャンピオン言えるかな" data-lang="ja" data-hashtags="LoLチャンピオン言えるかな">ツイート</a>
@@ -89,8 +102,8 @@
 					<div id="timer-area">000:00:00</div>
 					<div id="remain-area">残り<span id="num-of-remain">○○</span>人</div>
 					<input type="text" id="answer-text" />
-					<input type="button" id="answer-btn" class="btn btn-primary" value="答える" disabled="false" />
-					<input type="button" id="game-start-btn" class="btn btn-success" value="ゲーム開始" />
+					<input type="button" id="answer-btn" class="btn btn-primary" value="Answer" disabled="false" />
+					<input type="button" id="game-start-btn" class="btn btn-success" value="Start!" />
 					<br/>
 					<div id="message-area">&nbsp;</div>
 				</div>
@@ -110,7 +123,8 @@
 						<h3 class="panel-title">変更履歴</h3>
 					</div>
 					<div class="panel-body">
-						2019/12/1 β0.2公開<br>
+						2019/12/1 β公開<br>
+						2019/12/3 多言語化対応<br>
 					</div>
 				</div>
 
