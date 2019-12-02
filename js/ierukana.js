@@ -13,8 +13,8 @@ ImasCg.Ierukana = function () {
 		last_name_kana: 32,
 	};
 	var BUTTON_LABEL = {
-		'gameStart': 'ゲーム開始',
-		'giveUp': '降参',
+		'gameStart': 'Start!',
+		'giveUp': 'Give Up!',
 	};
 	var MESSAGE = {
 		'gameClear': 'ゲームクリア！',
@@ -85,10 +85,12 @@ ImasCg.Ierukana = function () {
 		clearInterval(clearCount);
 		$('#answer-btn').prop('disabled', 'false');
 		$('#game-start-btn').removeClass('btn-danger').addClass('btn-success').val(BUTTON_LABEL['gameStart']);
-		$('#game-start-btn').after($('<input type="button" id="result-tweet-btn" value="結果をツイート" class="btn btn-info">'));
+		$('#game-start-btn').after($('<input type="button" id="result-tweet-btn" value="Share Tweet!" class="btn btn-info">'));
 
 		$('#difficulty-select').show();
 		$('#difficulty-show').text('');
+		$('#lang').prop('disabled', false);
+
 	};
 
 	var giveUp = function () {
@@ -118,6 +120,7 @@ ImasCg.Ierukana = function () {
 	var gameStart = function () {
 		$('#game-start-btn').removeClass('btn-success').addClass('btn-danger').prop('disabled', '').val(BUTTON_LABEL['giveUp']);
 		$('#answer-btn').prop('disabled', '');
+		$('#lang').prop('disabled', true);
 		startUnixTime = parseInt((new Date) / 1);
 		clearCount = setInterval(function() { countUpStart(startUnixTime); }, 10);
 	};
@@ -289,7 +292,35 @@ ImasCg.Ierukana = function () {
 				});
 			};
 
-			$.getJSON('data/champion.json').done(function(data) {
+			var lang = $('#lang option:selected').val();
+			var locales = 'locales/'+lang+'/champion.json';
+
+			$.getJSON(locales).done(function(data) {
+				jsonData = Object.keys(data.data).map(function (key) {return data.data[key]});
+				innerInit();
+			}).fail(function(errorData) {
+				$('#message-area').text('データ読み込みエラー');
+			});
+
+		},
+		changeLang : function(lang) {
+			jsonData = null;
+			var innerInit = function () {
+//				numOfChampions['all'] = jsonData.length;
+				numOfRemains['all'] = numOfChampions['all'];
+				$.each(THREE_ATTRIBUTES_ARRAY, function(index, attr) {
+					numOfChampions[attr] = numOfAllChampionsByAttribute(attr);
+					numOfRemains[attr] = numOfChampions[attr];
+					initTableByAttribute(attr);
+				});
+				$('.numOfChampion').text(numOfChampions['all']);
+				$('#num-of-remain').text(numOfChampions['all']);
+
+			};
+//			var lang = $('#lang option:selected').val();
+			var locales = 'locales/'+lang+'/champion.json';
+
+			$.getJSON(locales).done(function(data) {
 				jsonData = Object.keys(data.data).map(function (key) {return data.data[key]});
 				innerInit();
 			}).fail(function(errorData) {
