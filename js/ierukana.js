@@ -48,7 +48,10 @@ ImasCg.Ierukana = function () {
 			name = name.replace('IV', 'Ⅳ').replace(/\s+/g, '');
 			if (champion.name.replace('・', '').replace('＝', '').replace(/\s+/g, '') === name) {
 				result.push(champion);
+			}else if (champion.name == name.replace('&', '＆')) {
+				result.push(champion);
 			}
+
 		});
 		return result;
 	};
