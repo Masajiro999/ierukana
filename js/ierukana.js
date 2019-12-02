@@ -45,6 +45,7 @@ ImasCg.Ierukana = function () {
 	var getChampionByName = function(name, compare_flags) {
 		var result = [];
 		$.each(jsonData, function(index, champion) {
+			name = name.replace('IV', 'Ⅳ');
 			if (champion.name.replace('・', '').replace('＝', '') === name) {
 				result.push(champion);
 			}
