@@ -45,10 +45,11 @@ ImasCg.Ierukana = function () {
 	var getChampionByName = function(name, compare_flags) {
 		var result = [];
 		$.each(jsonData, function(index, champion) {
-			name = name.replace('IV', 'Ⅳ').replace(/\s+/g, '');
-			if (champion.name.replace('・', '').replace('＝', '').replace(/\s+/g, '') === name) {
+			name = name.replace(/\s+/g, '');
+			var championName = champion.name.replace(/\s+/g, '');
+			if (championName.replace('・', '').replace('＝', '') === name.replace('IV', 'Ⅳ')) {
 				result.push(champion);
-			}else if (champion.name == name.replace('&', '＆')) {
+ 			}else if (championName === name.replace('&', '＆').replace('Ⅳ', 'IV')) {
 				result.push(champion);
 			}
 
