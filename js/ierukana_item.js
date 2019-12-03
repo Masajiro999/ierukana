@@ -46,8 +46,9 @@ ImasCg.Ierukana_item = function () {
 		$.each(jsonData, function(index, champion) {
 			name = name.replace(/\s+/g, '');
 			var championName = champion.name.replace(/\s+/g, '');
-			championName = championName.replace('(クイックチャージ)');
-			championName = championName.replace('「').replace('」');
+			championName = championName.replace('「').replace('');
+			championName = championName.replace('」').replace('');
+			championName = championName.replace(':').replace('');
 			if (championName.replace('・', '').replace('＝', '') === name.replace('IV', 'Ⅳ')) {
 				result.push(champion);
  			}else if (championName === name.replace('&', '＆').replace('Ⅳ', 'IV')) {
