@@ -33,49 +33,35 @@ ImasCg.Ierukana_item = function () {
 	var clearCount = null;
 	var lastChampionName = null;
 
-	var getChampionById = function(id) {
-		$.each(jsonData, function(index, champion) {
-			if (champion.id === id)
-				return champion;
-		});
-		return null;
-	};
+	// var getChampionById = function(id) {
+	// 	$.each(jsonData, function(index, item) {
+	// 		if (item.id === id)
+	// 			return item;
+	// 	});
+	// 	return null;
+	// };
 
 	var getChampionByName = function(name, compare_flags) {
 		var result = [];
-		$.each(jsonData, function(index, champion) {
+		$.each(jsonData, function(index, item) {
 			name = name.replace(/\s+/g, '');
-			var championName = champion.name.replace(/\s+/g, '');
-			championName = championName.replace('「').replace('');
-			championName = championName.replace('」').replace('');
-			championName = championName.replace(':').replace('');
-			if (championName.replace('・', '').replace('＝', '') === name.replace('IV', 'Ⅳ')) {
-				result.push(champion);
- 			}else if (championName === name.replace('&', '＆').replace('Ⅳ', 'IV')) {
-				result.push(champion);
+			var itemName = item.name.replace(/\s+/g, '');
+			itemName = itemName.replace('「','');
+			itemName = itemName.replace('」','');
+			itemName = itemName.replace(':','');
+			if (itemName.replace('・', '').replace('＝', '') === name.replace('IV', 'Ⅳ')) {
+				result.push(item);
+ 			}else if (itemName === name.replace('&', '＆').replace('Ⅳ', 'IV')) {
+				result.push(item);
 			}
 
 		});
 		return result;
 	};
 
-	var getChampionIdByName = function (name) {
-		var index = '';
-		$.each(rensoData, function(i, champion) {
-			var championName = champion.name.replace(/\s+/g, '');
-			var nameRep = name.replace(/\s+/g, '');
-			if (championName.indexOf(nameRep) >= 0){
-				index = i;
-			}
-		});
-		if(!index){
-			throw new Error('idが見つからない');
-		}
-		return index;
-	};
 	var numOfAllChampionsByAttribute = function (attr) {
 		var cnt = 0;
-		$.each(jsonData, function(index, champion) {
+		$.each(jsonData, function(index, item) {
 				cnt++;
 		});
 		return cnt;
@@ -84,7 +70,7 @@ ImasCg.Ierukana_item = function () {
 	var updateChampionsNum = function () {
 		$('#num-of-remain').text(numOfRemains['all']);
 		$.each(THREE_ATTRIBUTES_ARRAY, function(index, attr) {
-			$('#' + attr + '-champions span.remain').text('あと' + numOfRemains[attr] + '個');
+			$('#' + attr + '-items span.remain').text('あと' + numOfRemains[attr] + '個');
 		});
 	};
 
@@ -114,10 +100,10 @@ ImasCg.Ierukana_item = function () {
 	};
 
 	var giveUp = function () {
-		$.each(rensoData, function(index, champion) {
-			if (! champion.answered) {
-				//var index = getChampionIdByName(champion.name);
-				$('#' + index).addClass('giveUp').text(champion.name);
+		$.each(jsonData, function(index, item) {
+			if (! item.answered) {
+				//var index = getChampionIdByName(item.name);
+				$('#' + item.id).addClass('giveUp').text(item.name);
 			}
 		});
 		resetFormAtGameEnd();
@@ -177,6 +163,7 @@ ImasCg.Ierukana_item = function () {
 			var forgetChampions = jsonData.filter(function(v) {
 				return !v.answered;
 			});
+
 			var oneForgetChampion = forgetChampions[Math.floor(Math.random() * (forgetChampions.length - 1))];
 
 			tweetText = 'あなたは ' + clearTime + ' かけて'
@@ -190,6 +177,7 @@ ImasCg.Ierukana_item = function () {
 		window.open(encodeURI(resultTweet));
 	};
 
+  // 同一名称対応
 	var answerButtonSubmit = function () {
 		var answer = $('#answer-text').val();
 		answer = answer.replace('・', '');
@@ -198,13 +186,14 @@ ImasCg.Ierukana_item = function () {
 		if (idolsHitName.length > 0) {
 			var idolsNotAnswered = idolsHitName.filter(function(v){ return !v.answered; });
 			if (idolsNotAnswered.length > 0) {
-				var champion = idolsNotAnswered[0];
-				var index = getChampionIdByName(champion.name);
-				$('#' + index).addClass('answered').text(champion.name);
-				champion.answered = true;
-				lastChampionName = champion.name;
+				$.each(idolsNotAnswered,function(index){
+					var item = idolsNotAnswered[index];
+					$('#' + item.id).addClass('answered').text(item.name);
+					item.answered = true;
+					lastChampionName = item.name;
 
-				numOfRemains['all'] -= 1;
+					numOfRemains['all'] -= 1;
+				})
 				updateChampionsNum();
 
 				$('#answer-text').val('');
@@ -252,7 +241,7 @@ ImasCg.Ierukana_item = function () {
 	};
 
 	var initTableByAttribute = function (attr) {
-		var tableId = '#' + attr + '-champions';
+		var tableId = '#' + attr + '-items';
 
 		$(tableId + ' span.remain').text('あと' + numOfRemains[attr] + '個');
 		$(tableId + ' tbody').html('');
@@ -264,11 +253,11 @@ ImasCg.Ierukana_item = function () {
 			$tr = $('<tr></tr>');
 			cnt = 0;
 		};
-		$.each(rensoData, function(index, champion) {
-			champion.answered = false;
-			champion.attr = 'all';
-			if (champion.attr === attr) {
-				var $td = $('<td id="' + index + '">&nbsp;</td>');
+		$.each(jsonData, function(index, item) {
+			item.answered = false;
+			item.attr = 'all';
+			if (item.attr === attr) {
+				var $td = $('<td id="' + item.id + '">&nbsp;</td>');
 				$tr.append($td.clone());
 				cnt++;
 				if (cnt == COLUMNS_IN_ROW) {
@@ -286,7 +275,6 @@ ImasCg.Ierukana_item = function () {
 		init: function () {
 
 			jsonData = null;
-			rensoData = null;
 
 			var innerInit = function () {
 				numOfChampions['all'] = jsonData.length;
@@ -319,7 +307,11 @@ ImasCg.Ierukana_item = function () {
 			var locales = 'locales/'+lang+'/item.json';
 
 			$.getJSON(locales).done(function(data) {
-				jsonData = Object.keys(data.data).map(function (key) {return data.data[key]});
+				jsonData = Object.keys(data.data).map(function (key) {
+					data.data[key].id = key;
+					return data.data[key]
+				});
+
 				innerInit();
 			}).fail(function(errorData) {
 				$('#message-area').text('データ読み込みエラー');
@@ -328,7 +320,6 @@ ImasCg.Ierukana_item = function () {
 		},
 		changeLang : function(lang) {
 			jsonData = null;
-			rensoData = null;
 			var innerInit = function () {
 //				numOfChampions['all'] = jsonData.length;
 				numOfRemains['all'] = numOfChampions['all'];
@@ -345,8 +336,10 @@ ImasCg.Ierukana_item = function () {
 			var locales = 'locales/'+lang+'/item.json';
 
 			$.getJSON(locales).done(function(data) {
-				jsonData = Object.keys(data.data).map(function (key) {return data.data[key]});
-				rensoData = data.data;
+				jsonData = Object.keys(data.data).map(function (key) {
+					data.data[key].id = key;
+					return data.data[key]
+				});
 				innerInit();
 			}).fail(function(errorData) {
 				$('#message-area').text('データ読み込みエラー');
