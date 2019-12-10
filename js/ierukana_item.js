@@ -257,7 +257,7 @@ ImasCg.Ierukana_item = function () {
 			item.answered = false;
 			item.attr = 'all';
 			if (item.attr === attr) {
-				var $td = $('<td id="' + item.id + '">&nbsp;</td>');
+				var $td = $('<td id="' + item.id + '"><img src="img/item/'+item.id +'.png" ></td>');
 				$tr.append($td.clone());
 				cnt++;
 				if (cnt == COLUMNS_IN_ROW) {
