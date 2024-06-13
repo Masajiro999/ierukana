@@ -49,6 +49,12 @@ ImasCg.Ierukana_item = function () {
 			itemName = itemName.replace('「','');
 			itemName = itemName.replace('」','');
 			itemName = itemName.replace(':','');
+			// 改行と改行以降の文字列を削除 TODO:よーわからんｗ
+			itemName = itemName.replace(/<br>.*$/g, "");
+			
+			// rarityLegendary タグを削除
+			itemName = itemName.replace(/<rarityLegendary>.*?<\/rarityLegendary>/g, "");
+
 			if (itemName.replace('・', '').replace('＝', '') === name.replace('IV', 'Ⅳ')) {
 				result.push(item);
  			}else if (itemName === name.replace('&', '＆').replace('Ⅳ', 'IV')) {
@@ -103,12 +109,15 @@ ImasCg.Ierukana_item = function () {
 		$.each(jsonData, function(index, item) {
 			if (! item.answered) {
 				//var index = getChampionIdByName(item.name);
-				$('#' + item.id).addClass('giveUp').text(item.name);
+				//$('#' + item.id).addClass('giveUp').text(item.name);
+				$('#' + item.id).append('<p id=i' + item.id +' class="item-name">' + item.name + '</p>');
+				$('#i' + item.id).addClass('giveUp');				
 			}
 		});
+	  
 		resetFormAtGameEnd();
 	};
-
+	  
 	var gameClear = function () {
 		alert(MESSAGE['gameClear']);
 		resetFormAtGameEnd();
@@ -188,7 +197,9 @@ ImasCg.Ierukana_item = function () {
 			if (idolsNotAnswered.length > 0) {
 				$.each(idolsNotAnswered,function(index){
 					var item = idolsNotAnswered[index];
-					$('#' + item.id).addClass('answered').text(item.name);
+					//$('#' + item.id).addClass('answered').text(item.name);
+					$('#' + item.id).css('background-color', 'cyan');	
+					$('#' + item.id).append('<p id=i' + item.id +' class="item-name">' + item.name + '</p>');
 					item.answered = true;
 					lastChampionName = item.name;
 
@@ -257,7 +268,7 @@ ImasCg.Ierukana_item = function () {
 			item.answered = false;
 			item.attr = 'all';
 			if (item.attr === attr) {
-				var $td = $('<td id="' + item.id + '"><img src="img/item/'+item.id +'.png" ></td>');
+				var $td = $('<td id="' + item.id + '"><img class="item-img" src="img/item/'+item.id +'.png" ></td>');
 				$tr.append($td.clone());
 				cnt++;
 				if (cnt == COLUMNS_IN_ROW) {
@@ -307,6 +318,10 @@ ImasCg.Ierukana_item = function () {
 			var locales = 'locales/'+lang+'/item.json';
 
 			$.getJSON(locales).done(function(data) {
+				// 最後の部分を除いたバージョン番号を取得
+				let newVersion = data.version.split(".").slice(0, -1).join(".");
+				$('#version').text(newVersion);
+
 				jsonData = Object.keys(data.data).map(function (key) {
 					data.data[key].id = key;
 					return data.data[key]
@@ -320,7 +335,9 @@ ImasCg.Ierukana_item = function () {
 		},
 		changeLang : function(lang) {
 			jsonData = null;
+
 			var innerInit = function () {
+
 //				numOfChampions['all'] = jsonData.length;
 				numOfRemains['all'] = numOfChampions['all'];
 				$.each(THREE_ATTRIBUTES_ARRAY, function(index, attr) {
@@ -330,7 +347,6 @@ ImasCg.Ierukana_item = function () {
 				});
 				$('.numOfChampion').text(numOfChampions['all']);
 				$('#num-of-remain').text(numOfChampions['all']);
-
 			};
 //			var lang = $('#lang option:selected').val();
 			var locales = 'locales/'+lang+'/item.json';

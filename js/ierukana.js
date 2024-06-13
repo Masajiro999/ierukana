@@ -300,6 +300,10 @@ ImasCg.Ierukana = function () {
 			var locales = 'locales/'+lang+'/champion.json';
 
 			$.getJSON(locales).done(function(data) {
+				// 最後の部分を除いたバージョン番号を取得
+				let newVersion = data.version.split(".").slice(0, -1).join(".");
+				$('#version').text(newVersion);
+
 				jsonData = Object.keys(data.data).map(function (key) {return data.data[key]});
 				innerInit();
 			}).fail(function(errorData) {

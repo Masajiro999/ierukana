@@ -65,9 +65,6 @@ table {
 #table-area td.answered {
 	background-color: cyan;
 }
-#table-area td.giveUp {
-	color: red;
-}
 
 #cu-header {
 	color: white;
